@@ -17,7 +17,6 @@
 - [How to install Fabric Mods](https://fabricmc.net/wiki/player:tutorials:adding_mods)
 
 You will need Fabric Loader 0.14.19 or newer installed in your game in order to load Wormhole. If you haven't installed Fabric mods before, you can find a guide for doing so [here](https://fabricmc.net/wiki/install).
-[![Download](https://img.icons8.com/material-sharp/512/download.png)](https://github.com/HalloTheEngineer/Wormhole/)
 
 
 ## License
