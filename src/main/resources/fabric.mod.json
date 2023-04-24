@@ -6,7 +6,7 @@
   "description": "",
   "authors": [],
   "contact": {},
-  "license": "MIT",
+  "license": "Apache 2.0",
   "icon": "assets/wormhole/icon.png",
   "environment": "*",
   "entrypoints": {

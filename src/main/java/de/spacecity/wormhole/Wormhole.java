@@ -121,7 +121,7 @@ public class Wormhole implements ModInitializer {
             if (!config.exists()) {
                 config.createNewFile();
                 LOGGER.info("Config File has been created: " + config.getFilePath() + "\n");
-                LOGGER.warn("Now fill in your credentials and restart Minecraft \n");
+                LOGGER.warn("Now fill in your credentials and restart the server \n");
             } else {
                 LOGGER.warn(config.getFilePath() + " already exists, loading configurations...\n");
             }
