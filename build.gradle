@@ -12,12 +12,14 @@ repositories {
     // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
     // See https://docs.gradle.org/current/userguide/declaring_repositories.html
     // for more information about repositories.
-    maven {
-        url = "https://api.modrinth.com/maven"
-    }
+    mavenCentral()
+    mavenLocal()
     maven {
         url 'https://jitpack.io'
     }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    maven { url 'https://m2.dv8tion.net/releases' }
+    maven { url "https://mvnrepository.com/artifact/io.projectreactor/reactor-bom" }
 
 }
 
@@ -29,8 +31,30 @@ dependencies {
 
         // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    implementation 'me.carleslc.Simple-YAML:Simple-Yaml:1.8.4'
-    implementation "com.discord4j:discord4j-core:3.2.4"
+    implementation include('me.carleslc.Simple-YAML:Simple-Yaml:1.8.4')
+    implementation include('com.discord4j:discord4j-core:3.2.4')
+    implementation include("com.discord4j:discord4j-rest:3.2.3")
+    implementation include("com.discord4j:discord4j-common:3.2.3")
+    implementation include("com.discord4j:discord4j-gateway:3.2.3")
+    implementation include("com.discord4j:discord4j-voice:3.2.3")
+    implementation include("com.discord4j:simple-fsm:1.0.1")
+    implementation include("com.discord4j:discord-json:1.6.14")
+    implementation include("com.discord4j:discord-json-api:1.6.13")
+    implementation include("com.github.ben-manes.caffeine:caffeine:2.8.8")
+    implementation include("io.projectreactor:reactor-core:3.4.22")
+    implementation include("io.projectreactor.addons:reactor-extra:3.4.8")
+    implementation include("io.projectreactor.netty:reactor-netty-core:1.0.22")
+    implementation include("io.projectreactor.netty:reactor-netty-http:1.0.22")
+    implementation include('org.reactivestreams:reactive-streams:1.0.0.final')
+    implementation include("io.netty:netty-resolver-dns:4.1.79.Final")
+    implementation include("io.netty:netty-handler:4.1.79.Final")
+    implementation include("io.netty:netty-codec-http:4.1.79.Final")
+    implementation include("io.netty:netty-codec-http2:4.1.79.Final")
+    implementation include("io.netty:netty-codec-dns:4.1.79.Final")
+    implementation include("com.fasterxml.jackson.core:jackson-databind:2.12.7")
+    implementation include("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.12.7")
+    implementation include("com.fasterxml.jackson.core:jackson-annotations:2.12.7")
+    implementation include("com.fasterxml.jackson.core:jackson-core:2.12.7")
     }
 
 processResources {
@@ -90,5 +114,10 @@ publishing {
         // Notice: This block does NOT have the same function as the block in the top level.
         // The repositories here will be used for publishing your artifact, not for
         // retrieving dependencies.
+    }
+}
+configurations.all {
+    resolutionStrategy {
+        force("net.fabricmc:fabric-loader:$loader_version")
     }
 }

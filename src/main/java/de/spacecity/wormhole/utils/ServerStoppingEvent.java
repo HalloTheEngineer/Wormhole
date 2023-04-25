@@ -25,7 +25,6 @@ public class ServerStoppingEvent implements ServerLifecycleEvents.ServerStopping
                     EmbedData.builder()
                             .title("Server stopped at " + Time.valueOf(LocalTime.now())).build()).block();
         }
-
         Wormhole.DISCORD_BOT.interrupt();
     }
 }

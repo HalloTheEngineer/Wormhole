@@ -65,11 +65,12 @@ public class Wormhole implements ModInitializer {
             return loggedIn.and(createMessage);
         });
         login.block();
-    });
+    }, "DiscordBot");
 
 
     @Override
     public void onInitialize() {
+        LOGGER.info("Initializing of mod Wormhole started");
         loadConfig();
         if (!botStartup()) {
             USING_BOT = false;
