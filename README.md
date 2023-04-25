@@ -1,4 +1,5 @@
 # Wormhole - _Yet another simple DiscordMinecraft Link_
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/O5O0KPPEY)
 
 ### Powered by:
 - [Discord4J](https://github.com/Discord4J/Discord4J)
