@@ -4,8 +4,10 @@
   "package": "de.spacecity.wormhole.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ServerPlayerMixin",
-    "ConnectionMixin"
+    "ConnectionMixin",
+    "DamageTrackerMixin",
+    "PlayerAdvancementTrackerMixin",
+    "ServerPlayerNetworkMixin"
   ],
   "client": [
   ],

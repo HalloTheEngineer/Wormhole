@@ -23,7 +23,7 @@ public class ServerStoppingEvent implements ServerLifecycleEvents.ServerStopping
         } else {
             Wormhole.CHANNEL.createMessage(
                     EmbedData.builder()
-                            .title("Server stopped at " + Time.valueOf(LocalTime.now())).build()).block();
+                            .title(" 🔴 Server stopped at " + Time.valueOf(LocalTime.now())).build()).block();
         }
         Wormhole.DISCORD_BOT.interrupt();
     }

@@ -10,8 +10,8 @@ import discord4j.core.event.domain.lifecycle.ReadyEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.User;
-import discord4j.discordjson.json.EmbedData;
-import discord4j.discordjson.json.EmbedImageData;
+import discord4j.core.object.presence.ClientActivity;
+import discord4j.core.object.presence.ClientPresence;
 import discord4j.rest.entity.RestChannel;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -24,8 +24,6 @@ import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
-import java.sql.Time;
-import java.time.LocalTime;
 
 public class Wormhole implements ModInitializer {
     public static boolean ENABLED = false;
@@ -44,6 +42,7 @@ public class Wormhole implements ModInitializer {
 
     public static Thread DISCORD_BOT = new Thread(() -> {
         BOT = DiscordClient.create(BOT_TOKEN);
+        BOT.gateway().setInitialPresence(shardInfo -> ClientPresence.online(ClientActivity.listening("for messages")));
         CHANNEL = BOT.getChannelById(Snowflake.of(CHANNEL_ID));
         login = BOT.withGateway((GatewayDiscordClient gateway) -> {
             Mono<Void> loggedIn = gateway.on(ReadyEvent.class, event ->
@@ -61,7 +60,6 @@ public class Wormhole implements ModInitializer {
                         + message.getAuthor().get().getDiscriminator() + " ▶ " + message.getContent()), false);
                 return Mono.empty();
             }).then();
-
             return loggedIn.and(createMessage);
         });
         login.block();
@@ -109,12 +107,6 @@ public class Wormhole implements ModInitializer {
         WEBHOOK_URL = config.getString("webhookUrl");
         if (WEBHOOK_URL == null || WEBHOOK_URL.isEmpty()) return false;
         WEBHOOK = new DiscordWebhook(WEBHOOK_URL);
-        try {
-            WEBHOOK.addEmbed(new DiscordWebhook.EmbedObject().setTitle("Server started at " + Time.valueOf(LocalTime.now())));
-            WEBHOOK.execute();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
         return true;
     }
     private static void loadConfig() {

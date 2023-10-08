@@ -6,6 +6,7 @@ import discord4j.discordjson.json.EmbedAuthorData;
 import discord4j.discordjson.json.EmbedData;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.server.PlayerManager;
+import net.minecraft.server.network.ConnectedClientData;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,13 +18,14 @@ import java.io.IOException;
 @Mixin(PlayerManager.class)
 public class ConnectionMixin {
     @Inject(method = "onPlayerConnect", at = @At("RETURN"))
-    public void onPlayerConnect(ClientConnection connection, ServerPlayerEntity player, CallbackInfo ci) throws IOException {
+    public void onPlayerConnect(ClientConnection connection, ServerPlayerEntity player, ConnectedClientData clientData, CallbackInfo ci) throws IOException {
         if (!Wormhole.ENABLED) return;
         if (!Wormhole.USING_BOT) {
             Wormhole.WEBHOOK.addEmbed(new DiscordWebhook.EmbedObject()
                     .setAuthor(player.getName().getString() + " joined the game.", "https://namemc.com/profile/" + player.getName().getString(),
                             "https://minotar.net/avatar/" + player.getName().getString())
             );
+
             Wormhole.WEBHOOK.execute();
         } else {
             Wormhole.CHANNEL.createMessage(

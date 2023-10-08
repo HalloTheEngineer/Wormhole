@@ -7,7 +7,6 @@ import discord4j.discordjson.json.EmbedData;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.io.IOException;
 
 @Mixin(ServerPlayNetworkHandler.class)
-public class ServerPlayerMixin {
+public class ServerPlayerNetworkMixin {
     @Shadow public ServerPlayerEntity player;
 
     @Inject(method = "handleDecoratedMessage", at = @At("TAIL"))
@@ -36,6 +35,5 @@ public class ServerPlayerMixin {
                     ).build()).description(message.getContent().getString()).build()
             ).block();
         }
-
     }
 }
