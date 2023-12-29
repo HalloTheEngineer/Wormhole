@@ -13,13 +13,6 @@ repositories {
     // See https://docs.gradle.org/current/userguide/declaring_repositories.html
     // for more information about repositories.
     mavenCentral()
-    mavenLocal()
-    maven {
-        url 'https://jitpack.io'
-    }
-    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
-    maven { url 'https://m2.dv8tion.net/releases' }
-    maven { url "https://mvnrepository.com/artifact/io.projectreactor/reactor-bom" }
 
 }
 
@@ -31,31 +24,24 @@ dependencies {
 
         // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    implementation include('me.carleslc.Simple-YAML:Simple-Yaml:1.8.4')
-    implementation include('com.discord4j:discord4j-core:3.2.4')
-    implementation include("com.discord4j:discord4j-rest:3.2.3")
-    implementation include("com.discord4j:discord4j-common:3.2.3")
-    implementation include("com.discord4j:discord4j-gateway:3.2.3")
-    implementation include("com.discord4j:discord4j-voice:3.2.3")
-    implementation include("com.discord4j:simple-fsm:1.0.1")
-    implementation include("com.discord4j:discord-json:1.6.14")
-    implementation include("com.discord4j:discord-json-api:1.6.13")
-    implementation include("com.github.ben-manes.caffeine:caffeine:2.8.8")
-    implementation include("io.projectreactor:reactor-core:3.4.22")
-    implementation include("io.projectreactor.addons:reactor-extra:3.4.8")
-    implementation include("io.projectreactor.netty:reactor-netty-core:1.0.22")
-    implementation include("io.projectreactor.netty:reactor-netty-http:1.0.22")
-    implementation include('org.reactivestreams:reactive-streams:1.0.0.final')
-    implementation include("io.netty:netty-resolver-dns:4.1.79.Final")
-    implementation include("io.netty:netty-handler:4.1.79.Final")
-    implementation include("io.netty:netty-codec-http:4.1.79.Final")
-    implementation include("io.netty:netty-codec-http2:4.1.79.Final")
-    implementation include("io.netty:netty-codec-dns:4.1.79.Final")
-    implementation include("com.fasterxml.jackson.core:jackson-databind:2.12.7")
-    implementation include("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.12.7")
-    implementation include("com.fasterxml.jackson.core:jackson-annotations:2.12.7")
-    implementation include("com.fasterxml.jackson.core:jackson-core:2.12.7")
+
+    //JDA Compiling - Dependencies
+
+    implementation include("net.dv8tion:JDA:5.0.0-beta.18") {
+        exclude module: 'opus-java'
     }
+
+    include 'org.json:json:20230227'
+    include 'com.squareup.okio:okio:1.17.2'
+    include 'com.squareup.okhttp3:okhttp:3.13.0'
+    include "org.apache.commons:commons-collections4:4.4"
+    include "org.jetbrains.kotlin:kotlin-stdlib:1.6.21"
+    include "com.neovisionaries:nv-websocket-client:2.14"
+    include "net.sf.trove4j:trove4j:3.0.3"
+    include 'com.fasterxml.jackson.core:jackson-databind:2.13.4.1'
+    include "com.fasterxml.jackson.core:jackson-annotations:2.13.1"
+    include "com.fasterxml.jackson.core:jackson-core:2.13.1"
+}
 
 processResources {
     inputs.property "version", project.version
