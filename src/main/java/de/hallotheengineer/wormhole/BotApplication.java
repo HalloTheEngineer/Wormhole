@@ -13,11 +13,13 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
+import okhttp3.OkHttpClient;
 
 import java.awt.*;
 import java.sql.Time;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.concurrent.CompletableFuture;
 
 import static de.hallotheengineer.wormhole.Wormhole.LOGGER;
 import static de.hallotheengineer.wormhole.Wormhole.CONFIG;
@@ -26,6 +28,7 @@ public class BotApplication extends ListenerAdapter {
     private final MinecraftServer server;
     private TextChannel messageChannel;
     private boolean isActive;
+    private boolean terminated = false;
 
     public BotApplication(String token, MinecraftServer server) {
         this.jda = JDABuilder.createLight(token, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.MESSAGE_CONTENT)
@@ -58,11 +61,11 @@ public class BotApplication extends ListenerAdapter {
         messageChannel.sendMessageEmbeds(builder.build()).delay(Duration.ofSeconds(2)).queue();
     }
 
-    private void sendServerStopping() {
+    private CompletableFuture<Message> sendServerStopping() {
         EmbedBuilder builder = new EmbedBuilder();
         builder.setTitle(" :red_circle:  Server stopped at " + Time.valueOf(LocalTime.now()));
         builder.setColor(Color.RED);
-        messageChannel.sendMessageEmbeds(builder.build()).queue();
+        return messageChannel.sendMessageEmbeds(builder.build()).submit();
     }
 
     public void sendAdvancement(Text advancementDisplay) {
@@ -79,6 +82,7 @@ public class BotApplication extends ListenerAdapter {
         this.messageChannel.sendMessageEmbeds(builder.build()).queue();
     }
     public void sendPlayerDisconnect(Text name) {
+        if (this.terminated) return;
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(Color.RED);
         builder.setAuthor(name.getLiteralString() + " left the game", CONFIG.messageClickBaseUrl + name.getLiteralString(),
@@ -100,8 +104,12 @@ public class BotApplication extends ListenerAdapter {
         this.messageChannel.sendMessageEmbeds(builder.build()).queue();
     }
     public void shutdown() {
-        sendServerStopping();
-        this.jda.shutdown();
+        sendServerStopping().thenRun(() -> {
+            this.jda.shutdown();
+            OkHttpClient client = jda.getHttpClient();
+            client.connectionPool().evictAll();
+            client.dispatcher().executorService().shutdown();
+        });
     }
 
     @Override
